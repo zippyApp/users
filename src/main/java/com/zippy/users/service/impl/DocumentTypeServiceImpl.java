@@ -23,7 +23,7 @@ public class DocumentTypeServiceImpl implements IDocumentTypeService {
 
     @Override
     public List<DocumentType> getAllDocumentTypes() {
-        return null;
+        return documentTypeRepository.findAll();
     }
 
     public DocumentType getDocumentTypeByName(String name) {

@@ -1,32 +1,42 @@
 package com.zippy.users.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 @Entity
 @Builder
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "reference")
-public class Reference {
+public class Reference implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reference_generator")
+    @SequenceGenerator(name = "reference_generator", sequenceName = "reference_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(name = "name")
     private String name;
 
-    @OneToOne(targetEntity = Document.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "document_id", referencedColumnName = "id")
-    private Document document;
+    @Column(name = "document_id")
+    private Long documentId;
 
     @Column(name = "phone_number")
     private String phone;
 
     @Column(name = "email")
     private String email;
+
+    @JsonIgnore
+    @OneToOne(targetEntity = Document.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_id", insertable = false, updatable = false)
+    private Document document;
 }

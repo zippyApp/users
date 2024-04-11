@@ -1,6 +1,7 @@
 package com.zippy.users.service.interfaces;
 
 import com.zippy.users.model.Document;
+
 import java.util.List;
 
 public interface IDocumentService {
@@ -9,4 +10,5 @@ public interface IDocumentService {
   List<Document> getAllDocuments();
   Document updateDocument(Document document);
   void deleteDocument(Long id);
+  Document updateDocumentType(Long id, Integer typeId);
 }

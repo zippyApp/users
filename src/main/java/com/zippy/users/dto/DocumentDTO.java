@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DocumentDTO {
+    private Long id;
     private String number;
     private DocumentTypeDTO type;
     private String frontImage;
