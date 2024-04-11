@@ -7,8 +7,11 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class UserDTO {
-  private String name;
+public class PersonalInformationDTO {
+  private Long id;
+  private String firstNames;
+  private String lastNames;
+  private String occupation;
   private String email;
   private DocumentDTO document;
   private String phone;

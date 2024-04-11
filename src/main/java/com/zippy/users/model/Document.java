@@ -1,33 +1,30 @@
 package com.zippy.users.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 @Data
+@Accessors(chain = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "document")
-public class Document {
+public class Document implements Serializable {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "document_generator")
+  @SequenceGenerator(name = "document_generator", sequenceName = "document_id_seq", allocationSize = 1)
   private Long id;
 
-  @ManyToOne(targetEntity = DocumentType.class, fetch = FetchType.LAZY)
-  @JoinColumn(name = "document_type_id", referencedColumnName = "id")
-  private DocumentType type;
+  @Column(name = "document_type_id")
+  private Integer typeId;
 
   @Column(name = "document_number")
   private String number;
@@ -37,4 +34,10 @@ public class Document {
 
   @Column(name = "back_image")
   private String backImage;
+
+  @JsonIgnore
+  @ManyToOne(targetEntity = DocumentType.class, fetch = FetchType.LAZY)
+  @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
+  private DocumentType type;
+
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReferenceDTO {
+    private Long id;
     private String name;
     private String phone;
     private String email;
