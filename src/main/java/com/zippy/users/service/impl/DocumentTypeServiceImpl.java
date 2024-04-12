@@ -1,20 +1,16 @@
 package com.zippy.users.service.impl;
 
 import com.zippy.users.model.DocumentType;
-import org.springframework.stereotype.Service;
-
-import com.zippy.users.service.interfaces.IDocumentTypeService;
 import com.zippy.users.repository.IDocumentTypeRepository;
+import com.zippy.users.service.interfaces.IDocumentTypeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class DocumentTypeServiceImpl implements IDocumentTypeService {
-    private final IDocumentTypeRepository documentTypeRepository;
-
-    public DocumentTypeServiceImpl(IDocumentTypeRepository documentTypeRepository) {
-        this.documentTypeRepository = documentTypeRepository;
-    }
+    private IDocumentTypeRepository documentTypeRepository;
 
     @Override
     public DocumentType getDocumentTypeById(Integer id) {
@@ -26,9 +22,14 @@ public class DocumentTypeServiceImpl implements IDocumentTypeService {
         return documentTypeRepository.findAll();
     }
 
-    public DocumentType getDocumentTypeByName(String name) {
-        return documentTypeRepository.findByName(name);
+    @Override
+    public boolean existsDocumentTypeById(Integer id) {
+        return documentTypeRepository.existsById(id);
     }
 
+    @Autowired
+    public void setDocumentTypeRepository(IDocumentTypeRepository documentTypeRepository) {
+        this.documentTypeRepository = documentTypeRepository;
+    }
 
 }

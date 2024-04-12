@@ -36,7 +36,7 @@ public class Reference implements Serializable {
     private String email;
 
     @JsonIgnore
-    @OneToOne(targetEntity = Document.class, fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = Document.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id", insertable = false, updatable = false)
     private Document document;
 }
