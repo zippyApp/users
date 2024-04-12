@@ -18,26 +18,26 @@ import java.io.Serializable;
 @Entity
 @Table(name = "document")
 public class Document implements Serializable {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "document_generator")
-  @SequenceGenerator(name = "document_generator", sequenceName = "document_id_seq", allocationSize = 1)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "document_generator")
+    @SequenceGenerator(name = "document_generator", sequenceName = "document_id_seq", allocationSize = 1)
+    private Long id;
 
-  @Column(name = "document_type_id")
-  private Integer typeId;
+    @Column(name = "document_type_id")
+    private Integer typeId;
 
-  @Column(name = "document_number")
-  private String number;
+    @Column(name = "document_number")
+    private String number;
 
-  @Column(name = "front_image")
-  private String frontImage;
+    @Column(name = "front_image")
+    private String frontImage;
 
-  @Column(name = "back_image")
-  private String backImage;
+    @Column(name = "back_image")
+    private String backImage;
 
-  @JsonIgnore
-  @ManyToOne(targetEntity = DocumentType.class, fetch = FetchType.LAZY)
-  @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
-  private DocumentType type;
+    @JsonIgnore
+    @ManyToOne(targetEntity = DocumentType.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
+    private DocumentType type;
 
 }

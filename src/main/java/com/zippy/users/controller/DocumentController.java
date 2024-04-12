@@ -1,17 +1,14 @@
 package com.zippy.users.controller;
 
 import com.zippy.users.dto.DocumentDTO;
+import com.zippy.users.dto.DocumentTypeDTO;
+import com.zippy.users.mappers.DocumentMapper;
+import com.zippy.users.mappers.DocumentTypeMapper;
+import com.zippy.users.service.interfaces.IDocumentService;
+import com.zippy.users.service.interfaces.IDocumentTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.zippy.users.service.interfaces.IDocumentTypeService;
-import com.zippy.users.service.interfaces.IDocumentService;
-
-import com.zippy.users.dto.DocumentTypeDTO;
-
-import com.zippy.users.mappers.DocumentTypeMapper;
-import com.zippy.users.mappers.DocumentMapper;
 
 import java.util.List;
 
@@ -29,9 +26,18 @@ public class DocumentController {
         return ResponseEntity.ok(documentTypeService.getAllDocumentTypes().stream().map(documentTypeMapper::DocumentTypeToDocumentTypeDTO).toList());
     }
 
-    @PutMapping("/{id}/type/{typeId}")
-    public ResponseEntity<DocumentDTO> updateDocumentType(@PathVariable  Long id, @PathVariable  Integer typeId) {
-        return ResponseEntity.ok(documentMapper.DocumentToDocumentDTO(documentService.updateDocumentType(id, typeId)));
+    @GetMapping("/types/{id}")
+    public ResponseEntity<DocumentTypeDTO> getDocumentTypeById(@PathVariable Integer id) {
+        return ResponseEntity.ok(documentTypeMapper.DocumentTypeToDocumentTypeDTO(documentTypeService.getDocumentTypeById(id)));
+    }
+
+    @PutMapping("/{id}/type/update")
+    public ResponseEntity<DocumentDTO> updateDocumentType(@PathVariable Long id, @RequestHeader("Document-Type") Integer typeId) {
+        return (documentService.updateDocumentType(id, typeId)
+                .map(documentMapper::DocumentToDocumentDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build()
+                ));
     }
 
     @Autowired

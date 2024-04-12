@@ -1,42 +1,80 @@
 package com.zippy.users.service.impl;
 
+import com.zippy.users.model.Document;
 import com.zippy.users.model.PersonalInformation;
-import com.zippy.users.service.interfaces.IPersonalInformationService;
 import com.zippy.users.repository.IPersonalInformation;
+import com.zippy.users.service.interfaces.IDocumentService;
+import com.zippy.users.service.interfaces.IPersonalInformationService;
+import com.zippy.users.service.interfaces.IReferenceService;
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonalInformationServiceImpl implements IPersonalInformationService {
-    private final IPersonalInformation userRepository;
+    private IPersonalInformation personalInformationRepository;
+    private IDocumentService documentService;
+    private IReferenceService referenceService;
 
-    public PersonalInformationServiceImpl(IPersonalInformation userRepository) {
-        this.userRepository = userRepository;
+    @Override
+    public PersonalInformation savePersonalInformation(PersonalInformation personalInformation) {
+        return personalInformationRepository.save(personalInformation);
     }
 
     @Override
-    public PersonalInformation saveUser(PersonalInformation personalInformation) {
-        return userRepository.save(personalInformation);
+    public Optional<PersonalInformation> getPersonalInformationById(Long id) {
+        return personalInformationRepository.findById(id);
     }
 
     @Override
-    public PersonalInformation getUserById(Long id) {
-        return userRepository.findUserById(id);
+    public List<PersonalInformation> getAllPersonalInformation() {
+        return personalInformationRepository.findAll();
     }
 
     @Override
-    public List<PersonalInformation> getAllUsers() {
-        return userRepository.findAll();
+    public PersonalInformation updatePersonalInformation(PersonalInformation personalInformation) {
+        return personalInformationRepository.save(personalInformation);
     }
 
     @Override
-    public PersonalInformation updateUser(PersonalInformation personalInformation) {
-        return userRepository.save(personalInformation);
+    public void deletePersonalInformation(Long id) {
+        personalInformationRepository.deleteById(id);
     }
 
     @Override
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    @Transactional
+    public Optional<PersonalInformation> newPersonalInformation(@NotNull PersonalInformation personalInformation) {
+        return savePersonalInformationDocument(personalInformation)
+                .flatMap(this::savePersonalInformationReference)
+                .map(this::savePersonalInformation);
+    }
+
+    private Optional<PersonalInformation> savePersonalInformationDocument(@NotNull PersonalInformation personalInformation) {
+        return documentService.newDocument(personalInformation.getDocument())
+                .map(document -> personalInformation.setDocumentId(document.getId()));
+    }
+
+    private Optional<PersonalInformation> savePersonalInformationReference(@NotNull PersonalInformation personalInformation) {
+        return referenceService.newReference(personalInformation.getReference())
+                .map(reference -> personalInformation.setReferenceId(reference.getId()));
+    }
+
+    @Autowired
+    public void setPersonalInformationRepository(IPersonalInformation personalInformationRepository) {
+        this.personalInformationRepository = personalInformationRepository;
+    }
+
+    @Autowired
+    public void setDocumentService(IDocumentService documentService) {
+        this.documentService = documentService;
+    }
+
+    @Autowired
+    public void setReferenceService(IReferenceService referenceService) {
+        this.referenceService = referenceService;
     }
 }
