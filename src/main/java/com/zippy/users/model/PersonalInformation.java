@@ -49,12 +49,12 @@ public class PersonalInformation implements Serializable {
     private Long referenceId;
 
     @JsonIgnore
-    @OneToOne(targetEntity = Document.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Document.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "document_id", insertable = false, updatable = false)
     private Document document;
 
     @JsonIgnore
-    @OneToOne(targetEntity = Reference.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Reference.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "reference_id", insertable = false, updatable = false)
     private Reference reference;
 }

@@ -36,7 +36,7 @@ public class Document implements Serializable {
     private String backImage;
 
     @JsonIgnore
-    @ManyToOne(targetEntity = DocumentType.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = DocumentType.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "document_type_id", insertable = false, updatable = false)
     private DocumentType type;
 

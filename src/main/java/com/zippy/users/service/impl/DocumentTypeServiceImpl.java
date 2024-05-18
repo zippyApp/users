@@ -7,14 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DocumentTypeServiceImpl implements IDocumentTypeService {
     private IDocumentTypeRepository documentTypeRepository;
 
     @Override
-    public DocumentType getDocumentTypeById(Integer id) {
-        return documentTypeRepository.findById(id).orElse(null);
+    public Optional<DocumentType> getDocumentTypeById(Integer id) {
+        return documentTypeRepository.findById(id);
     }
 
     @Override

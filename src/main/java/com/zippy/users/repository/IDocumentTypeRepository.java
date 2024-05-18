@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IDocumentTypeRepository extends JpaRepository<DocumentType, Integer> {
-    DocumentType findByName(String name);
 }

@@ -14,7 +14,10 @@ public class ReferenceDTO {
     private Long id;
 
     @NotEmpty
-    private String name;
+    private String firstNames;
+
+    @NotEmpty
+    private String lastNames;
 
     @NotEmpty
     private String phone;

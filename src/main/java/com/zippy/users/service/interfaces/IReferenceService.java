@@ -5,9 +5,11 @@ import com.zippy.users.model.Reference;
 import java.util.Optional;
 
 public interface IReferenceService {
-    Reference saveReference(Reference reference);
 
     Optional<Reference> newReference(Reference reference);
 
-    void deleteReference(Long referenceId);
+    Optional<Reference> updateReference(Long id, Reference reference);
+
+    Optional<Reference> getReferenceById(Long id);
+
 }
