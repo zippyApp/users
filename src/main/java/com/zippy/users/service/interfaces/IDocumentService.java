@@ -2,17 +2,13 @@ package com.zippy.users.service.interfaces;
 
 import com.zippy.users.model.Document;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface IDocumentService {
-    Document saveDocument(Document document);
 
-    Document getDocumentById(Long id);
+    Optional<Document> UpdateDocument(Long id, Document document);
 
-    List<Document> getAllDocuments();
-
-    Document updateDocument(Document document);
+    Optional<Document> getDocumentById(Long id);
 
     void deleteDocument(Long id);
 

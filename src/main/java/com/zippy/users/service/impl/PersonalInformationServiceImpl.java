@@ -2,6 +2,7 @@ package com.zippy.users.service.impl;
 
 import com.zippy.users.model.Document;
 import com.zippy.users.model.PersonalInformation;
+import com.zippy.users.model.Reference;
 import com.zippy.users.repository.IPersonalInformation;
 import com.zippy.users.service.interfaces.IDocumentService;
 import com.zippy.users.service.interfaces.IPersonalInformationService;
@@ -20,8 +21,7 @@ public class PersonalInformationServiceImpl implements IPersonalInformationServi
     private IDocumentService documentService;
     private IReferenceService referenceService;
 
-    @Override
-    public PersonalInformation savePersonalInformation(PersonalInformation personalInformation) {
+    private PersonalInformation savePersonalInformation(PersonalInformation personalInformation) {
         return personalInformationRepository.save(personalInformation);
     }
 
@@ -36,8 +36,12 @@ public class PersonalInformationServiceImpl implements IPersonalInformationServi
     }
 
     @Override
-    public PersonalInformation updatePersonalInformation(PersonalInformation personalInformation) {
-        return personalInformationRepository.save(personalInformation);
+    @Transactional
+    public Optional<PersonalInformation> updatePersonalInformation(Long id, PersonalInformation personalInformation) {
+        return getPersonalInformationById(id)
+                .map(PersonalInformation::getId)
+                .map(personalInformation::setId)
+                .map(this::savePersonalInformation);
     }
 
     @Override
@@ -48,20 +52,23 @@ public class PersonalInformationServiceImpl implements IPersonalInformationServi
     @Override
     @Transactional
     public Optional<PersonalInformation> newPersonalInformation(@NotNull PersonalInformation personalInformation) {
-        return savePersonalInformationDocument(personalInformation)
-                .flatMap(this::savePersonalInformationReference)
+        return saveNewDocumentFromPersonalInformation(personalInformation)
+                .flatMap(this::saveNewReferenceFromPersonalInformation)
                 .map(this::savePersonalInformation);
     }
 
-    private Optional<PersonalInformation> savePersonalInformationDocument(@NotNull PersonalInformation personalInformation) {
+    private Optional<PersonalInformation> saveNewDocumentFromPersonalInformation(@NotNull PersonalInformation personalInformation) {
         return documentService.newDocument(personalInformation.getDocument())
-                .map(document -> personalInformation.setDocumentId(document.getId()));
+                .map(Document::getId)
+                .map(personalInformation::setDocumentId);
     }
 
-    private Optional<PersonalInformation> savePersonalInformationReference(@NotNull PersonalInformation personalInformation) {
+    private Optional<PersonalInformation> saveNewReferenceFromPersonalInformation(@NotNull PersonalInformation personalInformation) {
         return referenceService.newReference(personalInformation.getReference())
-                .map(reference -> personalInformation.setReferenceId(reference.getId()));
+                .map(Reference::getId)
+                .map(personalInformation::setReferenceId);
     }
+
 
     @Autowired
     public void setPersonalInformationRepository(IPersonalInformation personalInformationRepository) {

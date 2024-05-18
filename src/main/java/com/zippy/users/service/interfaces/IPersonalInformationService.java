@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IPersonalInformationService {
-    PersonalInformation savePersonalInformation(PersonalInformation personalInformation);
 
     Optional<PersonalInformation> getPersonalInformationById(Long id);
 
@@ -14,7 +13,7 @@ public interface IPersonalInformationService {
 
     Optional<PersonalInformation> newPersonalInformation(PersonalInformation personalInformation);
 
-    PersonalInformation updatePersonalInformation(PersonalInformation personalInformation);
+    Optional<PersonalInformation> updatePersonalInformation(Long id, PersonalInformation personalInformation);
 
     void deletePersonalInformation(Long id);
 }

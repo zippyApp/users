@@ -17,15 +17,7 @@ public class PersonalInformationController {
 
     private PersonalInformationMapper personalInformationMapper;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PersonalInformationDTO> getUserById(@PathVariable Long id) {
-        return personalInformationService.getPersonalInformationById(id)
-                .map(personalInformationMapper::PersonalInformatonToPersonalInformationDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<PersonalInformationDTO>> getAllUsers() {
         return ResponseEntity.ok(personalInformationService.getAllPersonalInformation().stream()
                 .map(personalInformationMapper::PersonalInformatonToPersonalInformationDTO).toList());
@@ -46,13 +38,29 @@ public class PersonalInformationController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PersonalInformationDTO> getUserById(@PathVariable Long id) {
+        return personalInformationService.getPersonalInformationById(id)
+                .map(personalInformationMapper::PersonalInformatonToPersonalInformationDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PersonalInformationDTO> updateUser(@PathVariable Long id, @RequestBody PersonalInformationDTO personalInformationDTO) {
+        return personalInformationService.updatePersonalInformation(id, personalInformationMapper.PersonalInformatonDTOToPersonalInformation(personalInformationDTO))
+                .map(personalInformationMapper::PersonalInformatonToPersonalInformationDTO)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @Autowired
     public void setPersonalInformationService(IPersonalInformationService personalInformationService) {
         this.personalInformationService = personalInformationService;
     }
 
     @Autowired
-    public void setUserMapper(PersonalInformationMapper personalInformationMapper) {
+    public void SetPersonalInformationMapper(PersonalInformationMapper personalInformationMapper) {
         this.personalInformationMapper = personalInformationMapper;
     }
 
