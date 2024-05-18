@@ -59,31 +59,4 @@ public class ReferenceServiceImpl implements IReferenceService {
     public void setDocumentService(IDocumentService documentService) {
         this.documentService = documentService;
     }
-
-    @Override
-    public Optional<Reference> newReference(Reference reference) {
-        return saveReferenceDocument(reference)
-                .map(this::saveReference);
-    }
-
-    @Override
-    public void deleteReference(Long referenceId) {
-        referenceRepository.deleteById(referenceId);
-    }
-
-
-    private Optional<Reference> saveReferenceDocument(@NotNull Reference reference) {
-        return documentService.newDocument(reference.getDocument())
-                .map(document -> reference.setDocumentId(document.getId()));
-    }
-
-    @Autowired
-    public void setReferenceRepository(IReferenceRepository referenceRepository) {
-        this.referenceRepository = referenceRepository;
-    }
-
-    @Autowired
-    public void setDocumentService(IDocumentService documentService) {
-        this.documentService = documentService;
-    }
 }
