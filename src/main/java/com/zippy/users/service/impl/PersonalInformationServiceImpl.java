@@ -1,5 +1,6 @@
 package com.zippy.users.service.impl;
 
+import com.zippy.users.exceptions.PersonalInformationCreationException;
 import com.zippy.users.model.Document;
 import com.zippy.users.model.PersonalInformation;
 import com.zippy.users.model.Reference;
@@ -7,7 +8,7 @@ import com.zippy.users.repository.IPersonalInformation;
 import com.zippy.users.service.interfaces.IDocumentService;
 import com.zippy.users.service.interfaces.IPersonalInformationService;
 import com.zippy.users.service.interfaces.IReferenceService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,11 +51,15 @@ public class PersonalInformationServiceImpl implements IPersonalInformationServi
     }
 
     @Override
-    @Transactional
-    public Optional<PersonalInformation> newPersonalInformation(@NotNull PersonalInformation personalInformation) {
-        return saveNewDocumentFromPersonalInformation(personalInformation)
+    @Transactional(rollbackFor = PersonalInformationCreationException.class)
+    public Optional<PersonalInformation> newPersonalInformation(@NotNull PersonalInformation personalInformation) throws PersonalInformationCreationException {
+        Optional<PersonalInformation> result = saveNewDocumentFromPersonalInformation(personalInformation)
                 .flatMap(this::saveNewReferenceFromPersonalInformation)
                 .map(this::savePersonalInformation);
+        if (result.isEmpty()) {
+            throw new PersonalInformationCreationException("Error creating new personal information.");
+        }
+        return result;
     }
 
     private Optional<PersonalInformation> saveNewDocumentFromPersonalInformation(@NotNull PersonalInformation personalInformation) {
