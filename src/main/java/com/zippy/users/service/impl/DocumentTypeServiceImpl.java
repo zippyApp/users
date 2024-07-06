@@ -5,11 +5,13 @@ import com.zippy.users.repository.IDocumentTypeRepository;
 import com.zippy.users.service.interfaces.IDocumentTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@CrossOrigin(origins = "*")
 public class DocumentTypeServiceImpl implements IDocumentTypeService {
     private IDocumentTypeRepository documentTypeRepository;
 

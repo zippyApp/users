@@ -7,10 +7,12 @@ import com.zippy.users.service.interfaces.IDocumentTypeService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Optional;
 
 @Service
+@CrossOrigin(origins = "*")
 public class DocumentServiceImpl implements IDocumentService {
     private IDocumentRepository documentRepository;
     private IDocumentTypeService documentTypeService;
